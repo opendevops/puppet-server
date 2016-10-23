@@ -1,6 +1,7 @@
-# == Class: server
+# = Class: server::packages::misc_useful
 #
-# Full description of class server here.
+# This class is not intended to be used directly.
+# It may be imported or inherited by other classes.
 #
 # === Parameters
 #
@@ -23,9 +24,6 @@
 #
 # === Examples
 #
-# include server
-# server::packages { 'server_packages': wkhtmltopdf => true, testing => true }
-# server::config { 'server_config': }
 #
 # === Authors
 #
@@ -35,11 +33,24 @@
 #
 # Copyright 2016 Matthew Hansen
 #
-class server () {
+class server::packages::misc_useful {
 
-  exec { 'apt-update':
-    path    => '/bin:/usr/bin',
-    command => 'apt-get update',
+  $packages = [
+    # send http/https requests
+    'curl',
+    # version control
+    'git',
+    # random password generator
+    'pwgen',
+    # simple MTA (mail transfer agent) and sendmail command provider which simply dumps your email output forward to SMTP service
+    'nullmailer',
+    # run 32bit programs in 64bit OS
+    'libc6-i386',
+  ]
+
+  package { $packages:
+    ensure  => latest,
+    require => Exec['apt-update'],
   }
 
 }

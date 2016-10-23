@@ -1,5 +1,12 @@
 # server
 
+example:
+```
+include server
+server::packages { 'server_packages': wkhtmltopdf => true, testing => true }
+server::config { 'server_config': }
+```
+
 #### Table of Contents
 
 1. [Overview](#overview)

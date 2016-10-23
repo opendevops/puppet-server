@@ -1,6 +1,7 @@
-# == Class: server
+# = Class: server::packages::security
 #
-# Full description of class server here.
+# This class is not intended to be used directly.
+# It may be imported or inherited by other classes.
 #
 # === Parameters
 #
@@ -23,9 +24,6 @@
 #
 # === Examples
 #
-# include server
-# server::packages { 'server_packages': wkhtmltopdf => true, testing => true }
-# server::config { 'server_config': }
 #
 # === Authors
 #
@@ -35,11 +33,25 @@
 #
 # Copyright 2016 Matthew Hansen
 #
-class server () {
+class server::packages::security {
 
-  exec { 'apt-update':
-    path    => '/bin:/usr/bin',
-    command => 'apt-get update',
+  $packages = [
+    # scans log files (e.g. /var/log/apache/error_log) and bans IPs that show the malicious sign
+    'fail2ban',
+    # Clam AntiVirus
+    'clamav',
+    'clamav-daemon',
+    # writing audit records to the disk.
+    'auditd',
+    # secure ssh connections
+    'openssh-server',
+    # secure requests
+    'openssl',
+  ]
+
+  package { $packages:
+    ensure  => latest,
+    require => Exec['apt-update'],
   }
 
 }

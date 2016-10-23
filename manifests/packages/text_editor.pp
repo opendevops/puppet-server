@@ -1,6 +1,7 @@
-# == Class: server
+# = Class: server::packages::text_editor
 #
-# Full description of class server here.
+# This class is not intended to be used directly.
+# It may be imported or inherited by other classes.
 #
 # === Parameters
 #
@@ -23,9 +24,6 @@
 #
 # === Examples
 #
-# include server
-# server::packages { 'server_packages': wkhtmltopdf => true, testing => true }
-# server::config { 'server_config': }
 #
 # === Authors
 #
@@ -35,11 +33,18 @@
 #
 # Copyright 2016 Matthew Hansen
 #
-class server () {
+class server::packages::text_editor {
 
-  exec { 'apt-update':
-    path    => '/bin:/usr/bin',
-    command => 'apt-get update',
+  $packages = [
+    # text editor
+    'vim',
+    # text editor
+    'nano',
+  ]
+
+  package { $packages:
+    ensure  => latest,
+    require => Exec['apt-update'],
   }
 
 }
